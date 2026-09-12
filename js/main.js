@@ -228,13 +228,23 @@ function initOpeningHours() {
       renderClockTrack(track, HOURS, day);
       lastDay = day;
     }
-    if (nowMark) {
+    if (nowMark && track) {
       let minutes = now.getHours() * 60 + now.getMinutes();
       if (minutes < CLOCK_AXIS_START) minutes += 24 * 60; // 00:00–01:00 -> extremo derecho del eje
-      nowMark.style.left = clockPct(minutes) + "%";
+      // clockPct() da un % pensado para mapearse sobre el ancho de
+      // .clock-track, pero .clock-now es hijo directo de .clock-timeline
+      // (que tiene padding-left: 3.4rem para la etiqueta "Hoy") — un simple
+      // `left: X%` ahí se calcula sobre el ancho TOTAL de .clock-timeline,
+      // no sobre el hueco real de la pista, así que la marca quedaba
+      // desplazada a la izquierda del horario real. Se calcula en píxeles
+      // contra la posición/ancho reales de la pista para que coincida
+      // siempre con el eje de horas, sea cual sea el ancho de pantalla.
+      const pct = clockPct(minutes);
+      nowMark.style.left = track.offsetLeft + (pct / 100) * track.offsetWidth + "px";
     }
   }
   update();
+  window.addEventListener("resize", update);
   setInterval(update, 60000);
 }
 initOpeningHours();
