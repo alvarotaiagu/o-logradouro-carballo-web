@@ -600,26 +600,47 @@ function initHeroTilt() {
 /* ---------- Cursor personalizado (solo puntero fino) ---------- */
 function initCustomCursor() {
   const ring = document.querySelector(".cursor-ring");
-  if (!ring) return;
+  const dot = document.querySelector(".cursor-dot");
+  if (!ring || !dot) return;
   document.body.classList.add("custom-cursor-active");
 
-  const moveX = gsap.quickTo(ring, "x", { duration: 0.35, ease: "power3" });
-  const moveY = gsap.quickTo(ring, "y", { duration: 0.35, ease: "power3" });
+  // El anillo llega con un pequeño retraso (quickTo con duración); el
+  // punto sigue el puntero 1:1, sin inercia — es la combinación que hace
+  // que se lea como "punto + halo", no solo un aro con el centro vacío.
+  const ringX = gsap.quickTo(ring, "x", { duration: 0.35, ease: "power3" });
+  const ringY = gsap.quickTo(ring, "y", { duration: 0.35, ease: "power3" });
+  const dotX = gsap.quickTo(dot, "x", { duration: 0.06, ease: "power1" });
+  const dotY = gsap.quickTo(dot, "y", { duration: 0.06, ease: "power1" });
 
   function onMove(e) {
     ring.classList.add("is-visible");
-    moveX(e.clientX);
-    moveY(e.clientY);
+    dot.classList.add("is-visible");
+    ringX(e.clientX);
+    ringY(e.clientY);
+    dotX(e.clientX);
+    dotY(e.clientY);
   }
   window.addEventListener("pointermove", onMove, { passive: true });
 
   document.querySelectorAll("a, button, [tabindex], .terraza-tile, .momento").forEach((el) => {
-    el.addEventListener("mouseenter", () => ring.classList.add("is-hover"));
-    el.addEventListener("mouseleave", () => ring.classList.remove("is-hover"));
+    el.addEventListener("mouseenter", () => {
+      ring.classList.add("is-hover");
+      dot.classList.add("is-hover");
+    });
+    el.addEventListener("mouseleave", () => {
+      ring.classList.remove("is-hover");
+      dot.classList.remove("is-hover");
+    });
   });
 
-  window.addEventListener("blur", () => ring.classList.remove("is-visible"));
-  document.addEventListener("mouseleave", () => ring.classList.remove("is-visible"));
+  window.addEventListener("blur", () => {
+    ring.classList.remove("is-visible");
+    dot.classList.remove("is-visible");
+  });
+  document.addEventListener("mouseleave", () => {
+    ring.classList.remove("is-visible");
+    dot.classList.remove("is-visible");
+  });
 }
 
 /* Actualiza medidas de ScrollTrigger cuando las fuentes/el layout se

@@ -1132,31 +1132,53 @@ body.has-cookie-banner .whatsapp-fab { bottom: 7.5rem; }
   body.has-cookie-banner .whatsapp-fab { bottom: 13rem; }
 }
 
-/* ---------- Cursor personalizado ---------- */
+/* ---------- Cursor personalizado ----------
+   Punto + anillo, no solo un anillo con un tinte al 12% casi imperceptible
+   como versión anterior (el usuario lo describió como "el círculo
+   exterior se ve, el interior no" — tenía razón: no existía un punto
+   interior de verdad). Los dos usan mix-blend-mode: difference en vez de
+   un color de marca fijo, así se ven con contraste garantizado tanto
+   sobre el hero oscuro como sobre las secciones claras, sin necesitar
+   lógica de color distinta por sección. */
+.cursor-dot {
+  position: fixed;
+  top: 0; left: 0;
+  width: 8px; height: 8px;
+  margin: -4px;
+  border-radius: 50%;
+  background: var(--papel);
+  mix-blend-mode: difference;
+  pointer-events: none;
+  z-index: 301;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.cursor-dot.is-visible { opacity: 0.95; }
+.cursor-dot.is-hover { transform: scale(0.4); }
+
 .cursor-ring {
   position: fixed;
   top: 0; left: 0;
-  width: 1.6rem; height: 1.6rem;
-  margin: -0.8rem;
+  width: 2.2rem; height: 2.2rem;
+  margin: -1.1rem;
   border-radius: 50%;
-  border: 1.5px solid var(--barro-hondo);
+  border: 1.5px solid var(--papel);
+  mix-blend-mode: difference;
   pointer-events: none;
   z-index: 300;
   opacity: 0;
-  transition: opacity 0.2s ease, width 0.25s ease, height 0.25s ease, margin 0.25s ease, border-color 0.25s ease;
+  transition: opacity 0.2s ease, width 0.25s ease, height 0.25s ease, margin 0.25s ease;
 }
 .cursor-ring.is-visible { opacity: 0.85; }
 .cursor-ring.is-hover {
-  width: 2.6rem; height: 2.6rem;
-  margin: -1.3rem;
-  border-color: var(--vino);
-  background: color-mix(in srgb, var(--vino) 12%, transparent);
+  width: 3.4rem; height: 3.4rem;
+  margin: -1.7rem;
 }
 body.custom-cursor-active, body.custom-cursor-active a, body.custom-cursor-active button {
   cursor: none;
 }
 @media (max-width: 900px), (pointer: coarse) {
-  .cursor-ring { display: none; }
+  .cursor-ring, .cursor-dot { display: none; }
 }
 
 /* ---------- Cookie banner ---------- */
