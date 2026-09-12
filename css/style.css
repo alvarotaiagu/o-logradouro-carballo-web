@@ -525,16 +525,19 @@ h2 {
   color: var(--tinta-tenue);
 }
 .momento-dot {
+  display: block;
+  position: absolute;
+  left: 0; top: 2.75rem;
+  transform: translate(-50%, -50%);
   width: 0.85rem; height: 0.85rem;
   border-radius: 50%;
-  margin: 0.9rem 0 1.5rem;
   background: var(--barro);
   box-shadow: 0 0 0 5px var(--piedra), 0 0 0 6px var(--linea);
 }
 .momento:nth-child(2) .momento-dot { background: var(--vino); }
 .momento:nth-child(3) .momento-dot { background: var(--oliva); }
 .momento:nth-child(4) .momento-dot { background: var(--vino-hondo); }
-.momento-icon { font-size: 1.6rem; color: var(--barro-hondo); margin-bottom: 0.75rem; display: block; }
+.momento-icon { font-size: 1.6rem; color: var(--barro-hondo); margin-top: 1.85rem; margin-bottom: 0.75rem; display: block; }
 .momento:nth-child(2) .momento-icon { color: var(--vino); }
 .momento:nth-child(3) .momento-icon { color: var(--oliva-hondo); }
 .momento:nth-child(4) .momento-icon { color: var(--vino-hondo); }
@@ -545,7 +548,8 @@ h2 {
   .momentos-track { grid-template-columns: 1fr; gap: 2.25rem; }
   .momentos-track::before { left: 0.42rem; top: 0; bottom: 0; width: 2px; height: auto; background: linear-gradient(180deg, var(--barro-tenue), var(--barro), var(--vino), var(--oliva)); }
   .momento { border-left: none; padding-left: 2rem; }
-  .momento-dot { position: absolute; left: 0; top: 0.3rem; margin: 0; }
+  .momento-dot { left: 0; top: 0.3rem; transform: none; }
+  .momento-icon { margin-top: 0; }
 }
 
 /* ---------- Marquee divider ---------- */
