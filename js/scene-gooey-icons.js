@@ -151,26 +151,47 @@
     }
   }
 
-  function drawGooeyIcon(ctx, type, x, y, size, color, blurSupported) {
-    ctx.save();
-    ctx.translate(x, y);
+  // Cada icono (halo borroso + copia nítida con sombra) se pinta UNA vez
+  // por tamaño/dpr sobre un canvas descartable y se reutiliza entero como
+  // sprite (un solo drawImage) en cada frame de la órbita — nada de lo que
+  // compone el icono cambia frame a frame, solo su posición. Aplicar
+  // `ctx.filter = blur(...)` y `shadowBlur` en directo sobre un canvas a
+  // sangre completa, 4 veces por frame, es lo que dejaba la página entera
+  // a ~2 fps (bloqueaba el hilo principal, incluido el scroll). Con el
+  // sprite cacheado, ese coste se paga una sola vez al construirlo.
+  function buildIconSprite(type, size, color, dpr, withBlur) {
+    const blurPx = Math.max(2, size * 0.16);
+    const half = size * 1.22 * 0.62 + blurPx * 3; // radio útil del icono agrandado + cola del blur
+    const s = document.createElement("canvas");
+    s.width = Math.max(1, Math.round(half * 2 * dpr));
+    s.height = Math.max(1, Math.round(half * 2 * dpr));
+    const sctx = s.getContext("2d");
+    if (!sctx) return null;
+    sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    sctx.translate(half, half);
 
-    if (blurSupported) {
-      ctx.save();
-      ctx.filter = `blur(${Math.max(2, size * 0.16)}px)`;
-      ctx.globalAlpha = 0.75;
-      ctx.save();
-      ctx.scale(1.22, 1.22);
-      paintIcon(ctx, type, size, color);
-      ctx.restore();
-      ctx.restore();
+    if (withBlur) {
+      sctx.save();
+      sctx.filter = `blur(${blurPx}px)`;
+      sctx.globalAlpha = 0.75;
+      sctx.save();
+      sctx.scale(1.22, 1.22);
+      paintIcon(sctx, type, size, color);
+      sctx.restore();
+      sctx.restore();
     }
 
-    ctx.shadowColor = "rgba(20,12,9,0.3)";
-    ctx.shadowBlur = size * 0.22;
-    ctx.shadowOffsetY = size * 0.08;
-    paintIcon(ctx, type, size * 0.92, color);
-    ctx.restore();
+    sctx.shadowColor = "rgba(20,12,9,0.3)";
+    sctx.shadowBlur = size * 0.22;
+    sctx.shadowOffsetY = size * 0.08;
+    paintIcon(sctx, type, size * 0.92, color);
+
+    return { canvas: s, half };
+  }
+
+  function drawGooeyIcon(ctx, x, y, sprite) {
+    if (!sprite) return;
+    ctx.drawImage(sprite.canvas, x - sprite.half, y - sprite.half, sprite.half * 2, sprite.half * 2);
   }
 
   const ICONS = [
@@ -195,6 +216,16 @@
     let t = 0;
     let raf = null;
     let running = false;
+    let iconScale = 0;
+    const blurSprites = new Map();
+
+    function rebuildSprites() {
+      blurSprites.clear();
+      ICONS.forEach((icon) => {
+        const size = icon.size * iconScale;
+        blurSprites.set(icon.type, buildIconSprite(icon.type, size, icon.color, dpr, blurSupported));
+      });
+    }
 
     function resize() {
       const rect = canvas.getBoundingClientRect();
@@ -211,6 +242,8 @@
       isNarrow = width < 760;
       cx = isNarrow ? width * 0.5 : width * 0.78;
       cy = isNarrow ? height * 0.88 : height * 0.42;
+      iconScale = isNarrow ? width * 0.16 : Math.min(height, width * 0.4);
+      rebuildSprites();
     }
 
     function onPointerMove(e) {
@@ -230,13 +263,12 @@
       // apretados en el centro con los lados vacíos.
       const spreadX = isNarrow ? width * 0.34 : width * 0.16;
       const spreadY = isNarrow ? height * 0.06 : height * 0.3;
-      const iconScale = isNarrow ? width * 0.16 : Math.min(height, width * 0.4);
       ICONS.forEach((icon) => {
         const ox = Math.cos(t * icon.speedX + icon.phase) * icon.radiusX * (spreadX / 0.34);
         const oy = Math.sin(t * icon.speedY + icon.phase * 1.3) * icon.radiusY * (spreadY / 0.34);
         const leanX = pointer.x * icon.pull * 16;
         const leanY = pointer.y * icon.pull * 16;
-        drawGooeyIcon(ctx, icon.type, cx + ox + leanX, cy + oy + leanY, icon.size * iconScale, icon.color, blurSupported);
+        drawGooeyIcon(ctx, cx + ox + leanX, cy + oy + leanY, blurSprites.get(icon.type));
       });
     }
 
