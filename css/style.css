@@ -119,21 +119,29 @@ h2 {
 }
 .split-word > span { display: inline-block; will-change: transform; }
 
-/* ---------- Header ---------- */
+/* ---------- Header ----------
+   Siempre oscura (tinta translúcida + blur), nunca la pastilla piedra
+   clara que llevaban las webs hermanas: sobre el hero (vino oscuro) ese
+   tono claro quedaba como una franja recortada y desentonada encima de un
+   fondo muy distinto — el usuario lo notó como "saturado" al ver la
+   cabecera. En dos estados de fondo posibles (hero oscuro arriba, resto
+   de secciones claras debajo) una cabecera oscura constante funciona en
+   ambos sin depender de JS para cambiar de color — sigue siendo legible
+   sin ScrollTrigger si el CDN de GSAP falla. */
 .site-header {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  background: color-mix(in srgb, var(--piedra) 80%, transparent);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: var(--tinta);
+  background: color-mix(in srgb, var(--tinta) 68%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--papel);
   box-shadow: 0 0 0 rgba(0, 0, 0, 0);
   transition: background-color 0.35s ease, box-shadow 0.35s ease;
 }
 .site-header.is-scrolled {
-  background: color-mix(in srgb, var(--papel) 94%, transparent);
-  box-shadow: 0 12px 34px -20px rgba(36, 26, 22, 0.35);
+  background: color-mix(in srgb, var(--tinta) 92%, transparent);
+  box-shadow: 0 12px 34px -20px rgba(0, 0, 0, 0.5);
 }
 
 .scroll-progress {
@@ -170,7 +178,7 @@ h2 {
   font-family: var(--display);
   font-size: 1.35rem;
   font-weight: 600;
-  color: var(--tinta);
+  color: var(--papel);
   margin-right: auto;
 }
 .brand-mark { width: 30px; height: 30px; flex-shrink: 0; }
@@ -181,7 +189,7 @@ h2 {
   gap: 0.45rem;
   font-size: 0.9rem;
   font-weight: 700;
-  color: var(--vino);
+  color: var(--barro-tenue);
   opacity: 0.9;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
