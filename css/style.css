@@ -204,11 +204,12 @@ h2 {
 .mobile-nav {
   display: none;
   background: var(--papel);
+  color: var(--tinta);
   border-top: 1px solid var(--linea-suave);
   padding: 0.5rem 1.5rem 1.5rem;
 }
 .mobile-nav ul { display: flex; flex-direction: column; gap: 0.25rem; }
-.mobile-nav a { display: block; padding: 0.75rem 0; font-size: 1.05rem; font-weight: 500; }
+.mobile-nav a { display: block; padding: 0.75rem 0; font-size: 1.05rem; font-weight: 500; color: var(--tinta); }
 .mobile-nav[hidden] { display: none; }
 
 @media (max-width: 900px) {
