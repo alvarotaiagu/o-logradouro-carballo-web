@@ -3,8 +3,10 @@
 // romperse: solo el movimiento es opcional aquí, no el menú móvil, el
 // estado del horario, el mapa, etc.
 const gsapReady = typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined";
+const flipReady = gsapReady && typeof Flip !== "undefined";
 if (gsapReady) {
   gsap.registerPlugin(ScrollTrigger);
+  if (flipReady) gsap.registerPlugin(Flip);
 }
 
 /* ---------- Word splitting (accesible) ---------- */
@@ -249,6 +251,83 @@ function initOpeningHours() {
 }
 initOpeningHours();
 
+/* ---------- Filtro de la carta completa ---------- */
+function initMesaFilters() {
+  const group = document.querySelector(".mesa-filters");
+  const cards = Array.from(document.querySelectorAll(".mesa-block"));
+  if (!group || !cards.length) return;
+  const pills = Array.from(group.querySelectorAll(".mesa-filter"));
+  const sheet = document.querySelector(".mesa-sheet");
+
+  function applyFilter(filter, animate) {
+    if (!flipReady) {
+      cards.forEach((card) => {
+        const match = filter === "todo" || card.dataset.category === filter;
+        card.hidden = !match;
+      });
+      return;
+    }
+
+    gsap.killTweensOf(cards);
+    const beforeHeight = sheet ? sheet.getBoundingClientRect().height : 0;
+    const state = animate ? Flip.getState(cards) : null;
+
+    cards.forEach((card) => {
+      const match = filter === "todo" || card.dataset.category === filter;
+      card.hidden = !match;
+    });
+
+    if (state) {
+      const afterHeight = sheet ? sheet.getBoundingClientRect().height : 0;
+      if (sheet) gsap.set(sheet, { height: beforeHeight, overflow: "hidden" });
+      gsap.set(cards, { pointerEvents: "none" });
+
+      const tl = gsap.timeline({
+        onComplete: () => {
+          gsap.set(cards, { clearProps: "transform,pointerEvents" });
+          if (sheet) gsap.set(sheet, { clearProps: "height,overflow" });
+        },
+      });
+      if (sheet) tl.to(sheet, { height: afterHeight, duration: 0.5, ease: "power2.inOut" }, 0);
+      tl.add(
+        Flip.from(state, {
+          duration: 0.5,
+          ease: "power2.inOut",
+          absolute: true,
+          onEnter: (els) => gsap.fromTo(els, { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.4, stagger: 0.04, ease: "power2.out" }),
+          onLeave: (els) => gsap.to(els, { opacity: 0, scale: 0.95, duration: 0.2, ease: "power2.in" }),
+        }),
+        0
+      );
+    }
+  }
+
+  function selectPill(pill, { focus = false, animate = true } = {}) {
+    pills.forEach((p) => {
+      const active = p === pill;
+      p.setAttribute("aria-checked", active ? "true" : "false");
+      p.tabIndex = active ? 0 : -1;
+    });
+    if (focus) pill.focus();
+    applyFilter(pill.dataset.filter, animate);
+  }
+
+  pills.forEach((pill, i) => {
+    pill.addEventListener("click", () => {
+      if (pill.getAttribute("aria-checked") === "true") return;
+      selectPill(pill, { animate: !reduceQuery.matches });
+    });
+    pill.addEventListener("keydown", (e) => {
+      const moves = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+      if (!(e.key in moves)) return;
+      e.preventDefault();
+      const next = pills[(i + moves[e.key] + pills.length) % pills.length];
+      selectPill(next, { focus: true, animate: !reduceQuery.matches });
+    });
+  });
+}
+initMesaFilters();
+
 /* ---------- Menú móvil ---------- */
 const navToggle = document.querySelector(".nav-toggle");
 const mobileNav = document.getElementById("mobile-nav");
@@ -464,11 +543,11 @@ function runSectionReveals() {
     const headingWords = headingSplitTargets.length
       ? headingSplitTargets.flatMap((el) => splitMap.get(el) || [])
       : null;
-    const blocks = group.querySelectorAll("p, .resenas-panel");
+    const blocks = group.querySelectorAll("p, .resenas-panel, .mesa-filters");
     const cards = group.querySelectorAll(
-      ".momento, .terraza-tile, .diptico-panel, .clock-card, .info-list li, .map-card, .mesa-foco"
+      ".momento, .terraza-tile, .diptico-panel, .clock-card, .info-list li, .map-card, .mesa-foco, .mesa-block"
     );
-    const rows = group.querySelectorAll(".mesa-index li, .hours-list li");
+    const rows = group.querySelectorAll(".mesa-items li, .hours-list li");
 
     if (headingWords) gsap.set(headingWords, { yPercent: 110, opacity: 0 });
     gsap.set(blocks, { y: 16, opacity: 0 });
@@ -493,7 +572,11 @@ function runSectionReveals() {
     );
     if (rows.length) {
       const rowStagger = Math.min(0.02, 0.4 / rows.length);
-      tl.to(rows, { opacity: 1, duration: 0.25, stagger: rowStagger, ease: "power1.out" }, "-=0.3");
+      // Solapa con las cards en vez de encadenarse después: en secciones
+      // con muchas filas (la carta completa, 67 líneas) encadenar todo en
+      // serie llevaba el revelado total a ~2,5s — perceptible como "tarda
+      // en aparecer" aunque técnicamente terminaba bien.
+      tl.to(rows, { opacity: 1, duration: 0.25, stagger: rowStagger, ease: "power1.out" }, "<+=0.15");
     }
     revealTimelines.push({ group, tl });
   });

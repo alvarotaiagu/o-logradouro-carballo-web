@@ -584,10 +584,9 @@ h2 {
 
 .mesa-layout {
   margin-top: 3rem;
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: clamp(2rem, 5vw, 4rem);
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 2.75rem);
 }
 
 .mesa-foco {
@@ -643,31 +642,84 @@ h2 {
 }
 .mesa-foco-tags iconify-icon { font-size: 1rem; color: var(--oliva-tenue); }
 
-.mesa-index-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
-.mesa-index-head h4 { font-family: var(--display); font-size: 1.1rem; font-weight: 600; font-style: italic; color: var(--tinta-suave); }
-.mesa-index-note { font-size: 0.78rem; color: var(--tinta-tenue); }
-.mesa-index {
-  margin-top: 1.25rem;
+/* ---------- Carta completa filtrable ----------
+   Pastillas de filtro (patrón funcional compartido con el resto del
+   workspace) + hoja en dos columnas, pero con tipografía y separadores
+   propios de O Logradouro (Fraunces itálica en los títulos de bloque,
+   línea de puntos barro en vez del estilo de A Taberna do Rio) en vez de
+   tarjetas fotográficas. */
+.mesa-filters {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 0.6rem;
 }
-.mesa-index li {
+.mesa-filter {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 1.1rem;
+  border-radius: 100px;
+  border: 1.5px solid var(--linea);
+  background: var(--papel);
+  color: var(--tinta-suave);
+  font-size: 0.86rem;
+  font-weight: 600;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.mesa-filter:hover { border-color: var(--barro-hondo); color: var(--tinta); }
+.mesa-filter[aria-checked="true"] {
+  background: var(--tinta);
+  border-color: var(--tinta);
+  color: var(--piedra);
+}
+.mesa-filter:active { transform: scale(0.96); }
+
+.mesa-sheet {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 3rem;
+  row-gap: 0;
+  background: var(--papel);
+  border: 1px solid var(--linea-suave);
+  border-radius: 1.25rem;
+  padding: 0.5rem clamp(1.5rem, 4vw, 3rem);
+  box-shadow: 0 30px 60px -35px rgba(36, 26, 22, 0.3);
+}
+.mesa-block[hidden] { display: none; }
+.mesa-block {
+  padding: 1.75rem 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.mesa-block:not(:last-child) { border-bottom: 1px dashed var(--linea-suave); }
+.mesa-block-head { margin-bottom: 1.1rem; }
+.mesa-block-head h4 { font-family: var(--display); font-size: 1.2rem; font-weight: 600; font-style: italic; color: var(--tinta); }
+.mesa-block-note { display: block; margin-top: 0.3rem; font-size: 0.78rem; color: var(--tinta-tenue); }
+.mesa-items li {
   display: flex;
   align-items: baseline;
-  gap: 0.6rem;
-  padding: 0.85rem 0;
-  border-bottom: 1px dashed var(--linea);
+  gap: 0.5rem;
+  padding: 0.55rem 0;
+  font-size: 0.96rem;
+  border-bottom: 1px dotted var(--linea-suave);
 }
-.mesa-index li:first-child { border-top: 1px dashed var(--linea); }
-.mesa-index-cat { flex-shrink: 0; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--barro-hondo); width: 5.5rem; }
-.mesa-index-name { font-family: var(--display); font-weight: 500; font-size: 1.02rem; }
-.mesa-index li.is-vegan .mesa-index-cat { color: var(--oliva-hondo); }
+.mesa-items li:last-child { border-bottom: none; }
+.mesa-items li > span:first-child { color: var(--tinta-suave); }
+.mesa-items li > span:first-child em { font-style: normal; color: var(--tinta-tenue); font-size: 0.85em; }
+.mesa-items .leader {
+  flex: 1 1 auto;
+  border-bottom: 1px dotted var(--linea);
+  transform: translateY(-0.3em);
+  margin: 0 0.15rem;
+}
+.mesa-items .price { color: var(--barro-hondo); font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.mesa-items li.is-vegan > span:first-child { color: var(--oliva-hondo); }
 
 @media (max-width: 900px) {
   .mesa-layout { grid-template-columns: 1fr; }
 }
-@media (max-width: 480px) {
-  .mesa-index-cat { width: 4.4rem; font-size: 0.62rem; }
+@media (max-width: 760px) {
+  .mesa-sheet { grid-template-columns: 1fr; }
 }
 
 /* ---------- Tradición y modernidad: díptico antes/ahora ---------- */

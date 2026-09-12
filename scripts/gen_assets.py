@@ -1,14 +1,17 @@
 """Genera el emblema/icono de marca y la imagen Open Graph para O Logradouro.
-No hay logo real del negocio disponible (Facebook/Instagram bloquean el
-scraping y las fichas de turismo no traen imagen), así que se crea un
-emblema propio (no una foto) con la paleta de la web: iniciales "OL" sobre
-un círculo vino, con una onda estilizada debajo (eco del acabado
-gelatinoso del hero). Se usa consistentemente en favicon, iconos de
-"añadir a inicio" y como marca en el pie de página (inline SVG en el
-propio index.html; este script solo genera los PNG/JPG de icono y OG).
+
+Actualizado (2026-09-12): el negocio compartió su logo real — un dibujo a
+mano de la fachada (persiana + ventana con maceta + puerta) firmado
+"O Logradouro" sobre el parche de una pandereta. `assets/img/logoweb.jpg`
+es la foto original; `assets/img/logo/real-icon-mask.png` es un recorte
+ajustado solo al dibujo del edificio (sin la mano ni el aro metálico de la
+pandereta), pasado a blanco y negro puro (ver README para el recorte
+exacto). Este script ya NO inventa un monograma "OL": compone ese dibujo
+real (línea papel sobre fondo vino) en los íconos de favicon/PWA y en la
+imagen Open Graph, sustituyendo el emblema genérico usado antes de tener
+la marca real.
 """
-import math
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 VINO = (122, 31, 46)         # --vino
 VINO_HONDO = (78, 18, 25)    # --vino-hondo
@@ -19,14 +22,18 @@ PAPEL = (255, 251, 243)      # --papel
 TINTA = (36, 26, 22)         # --tinta
 
 FONT_BOLD = "C:/Windows/Fonts/georgiab.ttf"
+REAL_ICON_MASK = "assets/img/logo/real-icon-mask.png"
 
 
-def wave_path(w, h, y_center, amplitude, cycles, phase=0):
-    pts = []
-    for x in range(0, w + 1, 4):
-        y = y_center + amplitude * math.sin((x / w) * cycles * 2 * math.pi + phase)
-        pts.append((x, y))
-    return pts
+def real_icon_rgba(fg=PAPEL):
+    """Convierte la máscara B/N real (negro = trazo) en una capa RGBA con
+    el trazo en `fg` y el resto transparente, lista para recortar/pegar
+    sobre cualquier fondo de color."""
+    mask = Image.open(REAL_ICON_MASK).convert("L")
+    alpha = mask.point(lambda p: 255 - p)  # negro (trazo) -> alpha alto
+    layer = Image.new("RGBA", mask.size, fg + (0,))
+    layer.putalpha(alpha)
+    return layer
 
 
 def make_icon(size, out_path, rounded=True):
@@ -43,21 +50,14 @@ def make_icon(size, out_path, rounded=True):
         cmd.rounded_rectangle([0, 0, S, S], radius=int(S * 0.22), fill=255)
 
     layer = Image.new("RGBA", (S, S), VINO + (255,))
-    ld = ImageDraw.Draw(layer)
-    ld.rectangle([0, int(S * 0.78), S, S], fill=VINO_HONDO + (255,))
 
-    wave_y = int(S * 0.78)
-    pts = wave_path(S, S, wave_y, S * 0.03, 1.6)
-    ld.line(pts, fill=BARRO, width=max(2, int(S * 0.02)))
-
-    font_size = int(S * 0.34)
-    font = ImageFont.truetype(FONT_BOLD, font_size)
-    text = "OL"
-    bbox = ld.textbbox((0, 0), text, font=font)
-    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
-    tx = (S - tw) / 2 - bbox[0]
-    ty = (S * 0.38) - th / 2 - bbox[1]
-    ld.text((tx, ty), text, font=font, fill=PAPEL)
+    icon = real_icon_rgba(PAPEL)
+    target_w = int(S * 0.66)
+    ratio = target_w / icon.width
+    icon = icon.resize((target_w, int(icon.height * ratio)), Image.LANCZOS)
+    ix = (S - icon.width) // 2
+    iy = int(S * 0.5) - icon.height // 2
+    layer.alpha_composite(icon, (ix, iy))
 
     base.paste(layer, (0, 0), circle_mask)
     img = base.resize((size, size), Image.LANCZOS)
@@ -87,17 +87,21 @@ def make_og_image(out_path):
         (760, 480, 190, OLIVA, 70),
     ]:
         od.ellipse([cx - r, cy - r, cx + r, cy + r], fill=color + (alpha,))
-    overlay = overlay.filter(__import__("PIL.ImageFilter", fromlist=["ImageFilter"]).GaussianBlur(60))
+    overlay = overlay.filter(ImageFilter.GaussianBlur(60))
     img.paste(Image.alpha_composite(img.convert("RGBA"), overlay).convert("RGB"), (0, 0))
-    d = ImageDraw.Draw(img)
+    img = img.convert("RGBA")
 
     cx, cy, r = 150, 150, 78
-    d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=PAPEL)
-    font_ol = ImageFont.truetype(FONT_BOLD, 58)
-    text = "OL"
-    bbox = d.textbbox((0, 0), text, font=font_ol)
-    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
-    d.text((cx - tw / 2 - bbox[0], cy - th / 2 - bbox[1] - 6), text, font=font_ol, fill=VINO)
+    badge = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    bd = ImageDraw.Draw(badge)
+    bd.ellipse([cx - r, cy - r, cx + r, cy + r], fill=PAPEL + (255,))
+    icon = real_icon_rgba(VINO)
+    target_w = int(r * 1.5)
+    ratio = target_w / icon.width
+    icon = icon.resize((target_w, int(icon.height * ratio)), Image.LANCZOS)
+    badge.alpha_composite(icon, (cx - icon.width // 2, cy - icon.height // 2))
+    img = Image.alpha_composite(img, badge).convert("RGB")
+    d = ImageDraw.Draw(img)
 
     font_title = ImageFont.truetype(FONT_BOLD, 70)
     d.text((80, 260), "O Logradouro", font=font_title, fill=PAPEL)

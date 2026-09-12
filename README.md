@@ -9,6 +9,44 @@ propia técnica de hero** — ver "Cuarta familia estructural" más abajo. Abrir
 `python -m http.server`) — no funciona bien con `file://` porque las fuentes
 y `js/main.js` necesitan HTTP.
 
+## Carta real y logo real (2026-09-12, noche)
+
+El negocio compartió 5 fotos de su carta real (dos tableros ilustrados de
+marca — desayunos/bocadillos/hamburguesas/postres/ensaladas y
+raciones/tapas/veganas — más 3 fotos de pizarras/hojas con petiscos,
+almuerzos con nombre propio y platos de wok) y una foto de su logo real:
+un dibujo a mano de la fachada (persiana, ventana con maceta, puerta)
+firmado "O Logradouro", estampado sobre el parche de una pandereta.
+
+- **Carta**: `#mesa` se reconstruyó por completo — de "no hay precios
+  reales, aviso de precios a confirmar" a una carta filtrable de 9
+  categorías (Desayunos, Almuerzos, Bocatas y hamburguesas, Tapas,
+  Raciones, Platos y wok, Ensaladas, Vegano, Postres) con ~67 platos y
+  precios reales. Las fotos de pizarra tenían platos repetidos con
+  precios ligeramente distintos entre sí (el negocio avisó de esto); se
+  usó la versión más detallada/reciente de cada plato repetido y se dejó
+  un aviso honesto en el `.mesa-lead` de que el precio puede variar
+  ligeramente según la pizarra del día. El plato destacado (`.mesa-foco`)
+  cambió de "langostinos y pulpo rebozados" (una suposición de una ficha
+  agregadora externa, no confirmada en la carta real) a la "Hamburguesa
+  Logradouro" — la única que lleva el nombre de la casa en la carta real.
+  Filtro reimplementado con GSAP Flip (mismo patrón que A Taberna do Rio,
+  adaptado a las clases `.mesa-*` de este sitio).
+- **Logo**: `assets/img/logoweb.jpg` es la foto original de la pandereta;
+  `assets/img/logo/real-icon-mask.png` es un recorte ajustado solo al
+  dibujo del edificio (sin mano ni aro metálico), pasado a blanco y negro
+  puro. `scripts/gen_assets.py` ya NO genera un monograma "OL" inventado:
+  compone ese dibujo real (línea papel sobre círculo vino) en favicon,
+  iconos PWA e imagen Open Graph, y `index.html` usa ese PNG como marca en
+  cabecera y pie en vez del SVG con iniciales. **Paleta**: se preguntó
+  explícitamente si adaptar toda la paleta a los colores reales del menú
+  ilustrado (verde bosque/rojo/crema) ahora que hay marca real — el
+  cliente pidió mantener la paleta barro/vino/oliva actual tal cual,
+  así que solo cambió el logo, no el resto de la dirección de arte.
+- Fotos de la carta original (`assets/img/unnamed*.webp`) se mantienen en
+  el repo como fuente/provenance, pero no se muestran en la web — su
+  contenido ya está transcrito en `#mesa`.
+
 ## Corrección de dirección de arte (2026-09-12, tarde)
 
 La primera entrega del hero, aunque usaba la técnica gooey-icon propia,

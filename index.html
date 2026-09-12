@@ -85,11 +85,7 @@
 <header class="site-header">
   <div class="header-inner">
     <a class="brand" href="#top" aria-label="O Logradouro, ir al inicio">
-      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-        <circle cx="16" cy="16" r="15" fill="#7A1F2E"/>
-        <path d="M6 21c2.5-4 5 4 8 1s5 4 8 1s3-2 4-3" stroke="#C1592E" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-        <text x="16" y="15.5" text-anchor="middle" dominant-baseline="central" font-family="Georgia, serif" font-weight="700" font-size="10.5" fill="#FFFBF3">OL</text>
-      </svg>
+      <img class="brand-mark" src="assets/img/logo/icon-96.png" alt="" width="30" height="30">
       <span>O Logradouro</span>
     </a>
 
@@ -244,38 +240,160 @@
       <p class="eyebrow">La mesa</p>
       <h2 data-split-word>Lo que no falta en la mesa.</h2>
       <p class="mesa-lead">
-        Cocina de siempre, con sitio también para quien no come carne ni pescado. Selección real de
-        lo más pedido — la carta completa y los precios se confirman con el local.
+        La carta real de O Logradouro, tal cual está en el local — de los desayunos de antes de las
+        13:00 a las tapas de última hora. Algunos precios varían ligeramente entre pizarras según el
+        día; para un pedido grande, mejor confirmar en barra.
       </p>
 
       <div class="mesa-layout">
         <article class="mesa-foco">
           <span class="mesa-foco-num" aria-hidden="true">01</span>
-          <p class="mesa-foco-flag"><iconify-icon icon="solar:star-bold" aria-hidden="true"></iconify-icon> El plato que más se repite</p>
-          <h3>Langostinos y pulpo rebozados</h3>
-          <p>El clásico de la casa: langostinos y pulpo rebozados y fritos al momento, para compartir
-          en la mesa o pedir de ración en la barra.</p>
+          <p class="mesa-foco-flag"><iconify-icon icon="solar:star-bold" aria-hidden="true"></iconify-icon> La que da nombre a la casa</p>
+          <h3>Hamburguesa Logradouro</h3>
+          <p>Carne, queso, lechuga, tomate y cebolla, con huevo o bacon a elegir — la hamburguesa de la
+          casa, la única que lleva su nombre en la carta.</p>
           <ul class="mesa-foco-tags">
-            <li><iconify-icon icon="solar:chef-hat-linear" aria-hidden="true"></iconify-icon>De toda la vida</li>
-            <li><iconify-icon icon="solar:users-group-rounded-linear" aria-hidden="true"></iconify-icon>Para compartir</li>
+            <li><iconify-icon icon="solar:chef-hat-linear" aria-hidden="true"></iconify-icon>La firma de la casa</li>
+            <li><iconify-icon icon="solar:tag-price-linear" aria-hidden="true"></iconify-icon>6,50 €</li>
           </ul>
         </article>
 
-        <div class="mesa-index-wrap">
-          <div class="mesa-index-head">
-            <h4>Resto de la mesa</h4>
-            <span class="mesa-index-note">Precios a confirmar</span>
+        <div class="mesa-filters-wrap">
+          <div class="mesa-filters" role="radiogroup" aria-label="Filtrar la carta por categoría">
+            <button type="button" class="mesa-filter" role="radio" aria-checked="true" data-filter="todo" tabindex="0"><span>Todo</span></button>
+            <button type="button" class="mesa-filter" role="radio" aria-checked="false" data-filter="desayunos" tabindex="-1"><span>Desayunos</span></button>
+            <button type="button" class="mesa-filter" role="radio" aria-checked="false" data-filter="almuerzos" tabindex="-1"><span>Almuerzos</span></button>
+            <button type="button" class="mesa-filter" role="radio" aria-checked="false" data-filter="bocatas" tabindex="-1"><span>Bocatas y burgers</span></button>
+            <button type="button" class="mesa-filter" role="radio" aria-checked="false" data-filter="tapas" tabindex="-1"><span>Tapas</span></button>
+            <button type="button" class="mesa-filter" role="radio" aria-checked="false" data-filter="raciones" tabindex="-1"><span>Raciones</span></button>
+            <button type="button" class="mesa-filter" role="radio" aria-checked="false" data-filter="platos" tabindex="-1"><span>Platos y wok</span></button>
+            <button type="button" class="mesa-filter" role="radio" aria-checked="false" data-filter="ensaladas" tabindex="-1"><span>Ensaladas</span></button>
+            <button type="button" class="mesa-filter" role="radio" aria-checked="false" data-filter="vegano" tabindex="-1"><span>Vegano</span></button>
+            <button type="button" class="mesa-filter" role="radio" aria-checked="false" data-filter="postres" tabindex="-1"><span>Postres</span></button>
           </div>
-          <ul class="mesa-index">
-            <li><span class="mesa-index-cat">Frito</span><span class="mesa-index-name">Tortilla de feira y betanceira</span></li>
-            <li><span class="mesa-index-cat">Frito</span><span class="mesa-index-name">Croquetas de jamón asado</span></li>
-            <li><span class="mesa-index-cat">Embutido</span><span class="mesa-index-name">Tabla de embutidos</span></li>
-            <li class="is-vegan"><span class="mesa-index-cat">Vegano</span><span class="mesa-index-name">Hamburguesas veganas</span></li>
-            <li><span class="mesa-index-cat">Plato</span><span class="mesa-index-name">Huevos rotos con langostinos</span></li>
-            <li><span class="mesa-index-cat">Postre</span><span class="mesa-index-name">Tarta de Santiago casera</span></li>
-            <li><span class="mesa-index-cat">Postre</span><span class="mesa-index-name">Tarta de pistacho</span></li>
-            <li><span class="mesa-index-cat">Postre</span><span class="mesa-index-name">Tarta de queso</span></li>
-          </ul>
+
+          <div class="mesa-sheet">
+            <article class="mesa-block" data-category="desayunos">
+              <header class="mesa-block-head"><h4>Desayunos</h4><span class="mesa-block-note">Hasta las 13:00 · café con leche doble y zumo de naranja natural incluidos — 6,50 €</span></header>
+              <ul class="mesa-items">
+                <li><span>Nº1 · Tostada con mantequilla y mermelada</span></li>
+                <li><span>Nº2 · Tostada con aceite y tomate</span></li>
+                <li><span>Nº3 · Tostada con aceite, tomate y jamón</span></li>
+                <li><span>Nº4 · Tostada con Nocilla</span></li>
+                <li><span>Nº5 · Pieza de bollería o bizcocho</span></li>
+              </ul>
+            </article>
+
+            <article class="mesa-block" data-category="almuerzos">
+              <header class="mesa-block-head"><h4>Almuerzos</h4><span class="mesa-block-note">Cada uno con café, colacao o infusión incluidos</span></header>
+              <ul class="mesa-items">
+                <li><span>Do Avo — tazón de sopas de pan con leche</span><span class="leader" aria-hidden="true"></span><span class="price">2,20 €</span></li>
+                <li><span>Meli — bol de muesli integral ecológico</span><span class="leader" aria-hidden="true"></span><span class="price">3,50 €</span></li>
+                <li><span>Silvia — trozo de bizcocho o tarta</span><span class="leader" aria-hidden="true"></span><span class="price">2,80 €</span></li>
+                <li><span>Antón — dos tostadas con Nocilla</span><span class="leader" aria-hidden="true"></span><span class="price">2,30 €</span></li>
+                <li><span>Susoserrano — bizcocho/tarta y tostada de tomate y jamón</span><span class="leader" aria-hidden="true"></span><span class="price">3,50 €</span></li>
+                <li><span>Tania — dos tostadas con tomate y aguacate</span><span class="leader" aria-hidden="true"></span><span class="price">2,80 €</span></li>
+                <li><span>Garban — trozo de tortilla</span><span class="leader" aria-hidden="true"></span><span class="price">3,80 €</span></li>
+                <li><span>Tova — dos tostadas con tomate y jamón</span><span class="leader" aria-hidden="true"></span><span class="price">3,50 €</span></li>
+                <li><span>Little Green — dos tostadas con tomate, jamón y queso do país</span><span class="leader" aria-hidden="true"></span><span class="price">4,50 €</span></li>
+              </ul>
+            </article>
+
+            <article class="mesa-block" data-category="bocatas">
+              <header class="mesa-block-head"><h4>Bocatas y hamburguesas</h4></header>
+              <ul class="mesa-items">
+                <li><span>Bocata Serranito (jamón con tomate o pimientos rojos)</span><span class="leader" aria-hidden="true"></span><span class="price">6,00 €</span></li>
+                <li><span>Bocata de huevos fritos, jamón o chorizo y patatas</span><span class="leader" aria-hidden="true"></span><span class="price">4,50 €</span></li>
+                <li><span>Hamburguesa simple</span><span class="leader" aria-hidden="true"></span><span class="price">4,50 €</span></li>
+                <li><span>Hamburguesa completa</span><span class="leader" aria-hidden="true"></span><span class="price">5,50 €</span></li>
+                <li><span>Hamburguesa Logradouro (con huevo o bacon)</span><span class="leader" aria-hidden="true"></span><span class="price">6,50 €</span></li>
+                <li><span>Hamburguesa de cerdo celta, lombarda encurtida y cebolla caramelizada</span><span class="leader" aria-hidden="true"></span><span class="price">9,00 €</span></li>
+                <li class="is-vegan"><span>Hamburguesa vegana (mismos acompañamientos)</span><span class="leader" aria-hidden="true"></span><span class="price">7,00 €</span></li>
+                <li><span>Menú perrito caliente gigante (30 cm) con cebolla crujiente</span><span class="leader" aria-hidden="true"></span><span class="price">9,50 €</span></li>
+              </ul>
+            </article>
+
+            <article class="mesa-block" data-category="tapas">
+              <header class="mesa-block-head"><h4>Tapas</h4></header>
+              <ul class="mesa-items">
+                <li><span>Ensaladilla</span><span class="leader" aria-hidden="true"></span><span class="price">4,00 €</span></li>
+                <li><span>Tortilla</span><span class="leader" aria-hidden="true"></span><span class="price">3,50 €</span></li>
+                <li><span>Tortilla á feira</span><span class="leader" aria-hidden="true"></span><span class="price">4,50 €</span></li>
+                <li><span>Croquetas ibéricas o de setas (4 uds.)</span><span class="leader" aria-hidden="true"></span><span class="price">4,00 €</span></li>
+                <li><span>Zorza</span><span class="leader" aria-hidden="true"></span><span class="price">4,50 €</span></li>
+                <li><span>Raxo</span><span class="leader" aria-hidden="true"></span><span class="price">4,50 €</span></li>
+                <li><span>Albóndigas</span><span class="leader" aria-hidden="true"></span><span class="price">4,50 €</span></li>
+                <li><span>Mini burguer</span><span class="leader" aria-hidden="true"></span><span class="price">2,50 €</span></li>
+              </ul>
+            </article>
+
+            <article class="mesa-block" data-category="raciones">
+              <header class="mesa-block-head"><h4>Raciones</h4></header>
+              <ul class="mesa-items">
+                <li><span>Raxo</span><span class="leader" aria-hidden="true"></span><span class="price">12,00 €</span></li>
+                <li><span>Raxo completo (con champiñones y pimientos)</span><span class="leader" aria-hidden="true"></span><span class="price">13,50 €</span></li>
+                <li><span>Zorza</span><span class="leader" aria-hidden="true"></span><span class="price">12,00 €</span></li>
+                <li><span>Chipirones fritos o a la plancha</span><span class="leader" aria-hidden="true"></span><span class="price">13,00 €</span></li>
+                <li><span>Huevos con chorizo o bacon</span><span class="leader" aria-hidden="true"></span><span class="price">10,00 €</span></li>
+                <li><span>Albóndigas</span><span class="leader" aria-hidden="true"></span><span class="price">10,00 €</span></li>
+                <li><span>Ensaladilla</span><span class="leader" aria-hidden="true"></span><span class="price">9,00 €</span></li>
+                <li><span>Croquetas ibéricas o de setas (8 uds.)</span><span class="leader" aria-hidden="true"></span><span class="price">8,00 €</span></li>
+                <li><span>Tortilla entera <em>· media 9,00 €</em></span><span class="leader" aria-hidden="true"></span><span class="price">15,00 €</span></li>
+                <li><span>Tortilla rellena (á feira, zorza, chorizo, cebolla...) <em>· media 12,00 €</em></span><span class="leader" aria-hidden="true"></span><span class="price">22,00 €</span></li>
+                <li><span>Patatas fritas</span><span class="leader" aria-hidden="true"></span><span class="price">3,00 €</span></li>
+                <li><span>Pan</span><span class="leader" aria-hidden="true"></span><span class="price">1,00 €</span></li>
+              </ul>
+            </article>
+
+            <article class="mesa-block" data-category="platos">
+              <header class="mesa-block-head"><h4>Platos y wok</h4></header>
+              <ul class="mesa-items">
+                <li><span>Tabla de ibéricos o queso celta</span><span class="leader" aria-hidden="true"></span><span class="price">16,00 €</span></li>
+                <li><span>Tabla surtida</span><span class="leader" aria-hidden="true"></span><span class="price">14,00 €</span></li>
+                <li><span>Tabla de quesos gallegos</span><span class="leader" aria-hidden="true"></span><span class="price">12,00 €</span></li>
+                <li><span>Escalibada (pimiento, berenjena y puerro)</span><span class="leader" aria-hidden="true"></span><span class="price">9,00 €</span></li>
+                <li><span>Escalibada con bacalao</span><span class="leader" aria-hidden="true"></span><span class="price">12,00 €</span></li>
+                <li><span>Wok de langostinos</span><span class="leader" aria-hidden="true"></span><span class="price">10,00 €</span></li>
+                <li><span>Salteado de arroz y grelos con pollo a la marroquí</span><span class="leader" aria-hidden="true"></span><span class="price">8,00 €</span></li>
+                <li><span>Segredo de cerdo</span><span class="leader" aria-hidden="true"></span><span class="price">10,00 €</span></li>
+                <li><span>Tiras de pollo al curry</span><span class="leader" aria-hidden="true"></span><span class="price">9,00 €</span></li>
+                <li><span>Sushi bowl Logradouro (salmón, berenjena encurtida, mayonesa de soja)</span><span class="leader" aria-hidden="true"></span><span class="price">9,00 €</span></li>
+                <li><span>Ramen con panceta y huevo cocido</span><span class="leader" aria-hidden="true"></span><span class="price">9,00 €</span></li>
+                <li class="is-vegan"><span>Ramen vegano (bolitas de pote y champiñones confitados)</span><span class="leader" aria-hidden="true"></span><span class="price">9,00 €</span></li>
+              </ul>
+            </article>
+
+            <article class="mesa-block" data-category="ensaladas">
+              <header class="mesa-block-head"><h4>Ensaladas</h4></header>
+              <ul class="mesa-items">
+                <li><span>Ensalada simple</span><span class="leader" aria-hidden="true"></span><span class="price">5,50 €</span></li>
+                <li><span>Ensalada completa (maíz, atún, surimi, nuez, huevo cocido)</span><span class="leader" aria-hidden="true"></span><span class="price">8,50 €</span></li>
+                <li><span>Ensalada con pollo crujiente, calabacín y parmesano</span><span class="leader" aria-hidden="true"></span><span class="price">9,00 €</span></li>
+              </ul>
+            </article>
+
+            <article class="mesa-block" data-category="vegano">
+              <header class="mesa-block-head"><h4>Opciones veganas</h4></header>
+              <ul class="mesa-items">
+                <li><span>Hamburguesa vegana</span><span class="leader" aria-hidden="true"></span><span class="price">7,00 €</span></li>
+                <li><span>Hamburguesa de zanahoria y pan de remolacha, sticks de verduras</span><span class="leader" aria-hidden="true"></span><span class="price">10,00 €</span></li>
+                <li><span>Canelones de hummus en berenjena, sticks de verduras</span><span class="leader" aria-hidden="true"></span><span class="price">11,00 €</span></li>
+                <li><span>Croquetas de setas (8 uds.)</span><span class="leader" aria-hidden="true"></span><span class="price">8,00 €</span></li>
+                <li><span>Wok vegano</span><span class="leader" aria-hidden="true"></span><span class="price">8,00 €</span></li>
+                <li><span>Albóndigas veganas</span><span class="leader" aria-hidden="true"></span><span class="price">9,00 €</span></li>
+                <li><span>Ramen vegano</span><span class="leader" aria-hidden="true"></span><span class="price">9,00 €</span></li>
+              </ul>
+            </article>
+
+            <article class="mesa-block" data-category="postres">
+              <header class="mesa-block-head"><h4>Postres</h4></header>
+              <ul class="mesa-items">
+                <li><span>Tarta Tiramisú <em>(sin gluten)</em></span><span class="leader" aria-hidden="true"></span><span class="price">5,50 €</span></li>
+                <li><span>Tarta de chocolate</span><span class="leader" aria-hidden="true"></span><span class="price">5,50 €</span></li>
+                <li><span>Tarta Red Velvet</span><span class="leader" aria-hidden="true"></span><span class="price">5,50 €</span></li>
+              </ul>
+            </article>
+          </div>
         </div>
       </div>
     </div>
@@ -497,11 +615,7 @@
   <div class="section-inner footer-inner">
     <div class="footer-brand">
       <a class="brand" href="#top" aria-label="O Logradouro, ir al inicio">
-        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-          <circle cx="16" cy="16" r="15" fill="#7A1F2E"/>
-          <path d="M6 21c2.5-4 5 4 8 1s5 4 8 1s3-2 4-3" stroke="#C1592E" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-          <text x="16" y="15.5" text-anchor="middle" dominant-baseline="central" font-family="Georgia, serif" font-weight="700" font-size="10.5" fill="#FFFBF3">OL</text>
-        </svg>
+        <img class="brand-mark" src="assets/img/logo/icon-96.png" alt="" width="30" height="30">
         <span>O Logradouro</span>
       </a>
       <p>Bar-taberna en el centro de Carballo, de siempre y puesto al día desde 2025.</p>
@@ -571,6 +685,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/Flip.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
 <script src="js/scene-gooey-icons.js"></script>
 <script src="js/main.js"></script>
